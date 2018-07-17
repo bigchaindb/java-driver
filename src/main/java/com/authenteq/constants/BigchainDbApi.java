@@ -28,8 +28,8 @@ public enum BigchainDbApi {
 	/** The blocks. */
 	BLOCKS("/blocks"),
 	
-	/** The votes. */
-	VOTES("/votes"),
+	/** The validators. */
+	VALIDATORS("/validators"),
 	
 	/** The transactions. */
 	TRANSACTIONS("/transactions");

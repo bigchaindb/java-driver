@@ -6,18 +6,18 @@ import java.io.IOException;
 
 
 /**
- * The Class VotesApiTest.
+ * The Class ValidatorsApiTest.
  */
-public class VotesApiTest extends AbstractApiTest
+public class ValidatorsApiTest extends AbstractApiTest
 {
 
 	/**
-	 * Test asset search.
+	 * Test get validators.
 	 */
 	@Test
-	public void testAssetSearch() {
+	public void testGetValidators() {
 		try {
-			VotesApi.getVotes("");
+			ValidatorsApi.getValidators();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

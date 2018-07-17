@@ -23,7 +23,7 @@ public class JsonUtils {
 		put( Transactions.class.getCanonicalName(), new TypeAdapter( Transactions.class, new TransactionsDeserializer() ) );
 		put( Assets.class.getCanonicalName(), new TypeAdapter( Assets.class, new AssetsDeserializer() ) );
 		put( Outputs.class.getCanonicalName(), new TypeAdapter( Outputs.class, new OutputsDeserializer() ) );
-		put( Votes.class.getCanonicalName(), new TypeAdapter( Votes.class, new VoteDeserializer() ) );
+		put( Validators.class.getCanonicalName(), new TypeAdapter( Validators.class, new ValidatorDeserializer() ) );
 	}};
 
 	private static Map<String, TypeAdapter> typeAdaptersSerialize = new ConcurrentHashMap<String, TypeAdapter>(16)
