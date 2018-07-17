@@ -1,7 +1,6 @@
 package com.authenteq.api;
 
 import com.authenteq.constants.BigchainDbApi;
-import com.authenteq.constants.BlockStatus;
 import com.authenteq.model.Block;
 import com.authenteq.model.BigChainDBGlobals;
 import com.authenteq.util.JsonUtils;
@@ -38,16 +37,15 @@ public class BlocksApi {
 	}
 	
 	/**
-	 * Gets the blocks.
+	 * Gets a list of block ids that contain the transaction
 	 *
 	 * @param transactionId the transaction id
-	 * @param status the status
-	 * @return the blocks
+	 * @return the block ids
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static List<String> getBlocks(String transactionId, BlockStatus status) throws IOException {
-		log.debug( "getBlocks Call :" + transactionId + " status " + status );
-		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.BLOCKS + "?transaction_id="+transactionId+"&status="+status);
+	public static List<String> getBlocksByTransactionId(String transactionId) throws IOException {
+		log.debug( "getBlocks Call :" + transactionId );
+		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.BLOCKS + "?transaction_id="+transactionId);
 		String body = response.body().string();
 		response.close();
 		return JsonUtils.getGson().fromJson(body, new TypeToken<List<String>>(){}.getType());

@@ -40,7 +40,7 @@ public class AssetsApi {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static Assets getAssetsWithLimit(String searchKey, String limit) throws IOException {
-		log.debug( "getAssets Call :" + searchKey + " limit " + limit );
+		log.debug( "getAssetsWithLimit Call :" + searchKey + " limit " + limit );
 		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.ASSETS + "?search="+ searchKey+ "&limit=" + limit);
 		String body = response.body().string();
 		response.close();

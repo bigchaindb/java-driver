@@ -10,7 +10,6 @@ import java.util.TreeMap;
 import org.junit.Test;
 
 import com.authenteq.builders.BigchainDbTransactionBuilder;
-import com.authenteq.constants.BlockStatus;
 import com.authenteq.constants.Operations;
 import com.authenteq.model.Account;
 import com.authenteq.model.Transaction;
@@ -49,7 +48,7 @@ public class BlocksApiTest extends AbstractApiTest
                       .buildAndSign((EdDSAPublicKey) Account.publicKeyFromHex(publicKey), (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
                       .sendTransaction();
 
-			assertFalse(BlocksApi.getBlocks(transaction.getId(), BlockStatus.VALID).isEmpty());
+			assertFalse(BlocksApi.getBlocksByTransactionId(transaction.getId()).isEmpty());
 
 		} catch (IOException | InvalidKeySpecException e) {
 			e.printStackTrace();

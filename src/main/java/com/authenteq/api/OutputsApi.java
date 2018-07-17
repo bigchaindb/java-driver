@@ -45,5 +45,19 @@ public class OutputsApi {
 		response.close();
 		return JsonUtils.fromJson(body, Outputs.class);
 	}
-	
+
+	/**
+	 * Gets the unspent outputs.
+	 *
+	 * @param publicKey the public key
+	 * @return the unspent outputs
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static Outputs getUnspentOutputs(String publicKey) throws IOException {
+		log.debug( "getUnspentOutputs Call :" + publicKey );
+		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.OUTPUTS + "?public_key="+ publicKey+ "&spent=false");
+		String body = response.body().string();
+		response.close();
+		return JsonUtils.fromJson(body, Outputs.class);
+	}
 }
