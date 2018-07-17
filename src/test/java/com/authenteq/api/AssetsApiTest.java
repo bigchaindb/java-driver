@@ -8,10 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.authenteq.builders.BigchainDbTransactionBuilder;
-import com.authenteq.json.strategy.AssetSerializer;
-import com.authenteq.model.Asset;
 import com.authenteq.model.Assets;
-import com.authenteq.model.StatusCode;
 import com.authenteq.model.Transaction;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
@@ -43,12 +40,11 @@ public class AssetsApiTest extends AbstractApiTest
 				                          .addAssets( assetData, Map.class )
 				                          .buildAndSign( (EdDSAPublicKey) alice.getPublic(), (EdDSAPrivateKey) alice.getPrivate() )
 				                          .sendTransaction();
-			assertEquals( StatusCode.VALID, getStatus( transaction ).getStatus() );    // wait for the transaction to be marked VALID
 
 			Assets assets = AssetsApi.getAssets( asQuoted( uuid ) );
 			assertTrue( assets.size() == 1 ); // there should be one and only one
 			assertTrue( assets.getAssets().get(0).getId() != null ); // asset ID should not be null
-		} catch (IOException | StatusException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

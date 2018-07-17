@@ -1,27 +1,18 @@
 package com.authenteq.api;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.security.KeyPair;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.authenteq.AbstractTest;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.authenteq.api.AssetsApi;
-import com.authenteq.builders.BigchainDbConfigBuilder;
 import com.authenteq.builders.BigchainDbTransactionBuilder;
 import com.authenteq.constants.BlockStatus;
 import com.authenteq.constants.Operations;
 import com.authenteq.model.Account;
-import com.authenteq.model.StatusCode;
 import com.authenteq.model.Transaction;
 
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
@@ -58,10 +49,9 @@ public class BlocksApiTest extends AbstractApiTest
                       .buildAndSign((EdDSAPublicKey) Account.publicKeyFromHex(publicKey), (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
                       .sendTransaction();
 
-			assertEquals(StatusCode.VALID, getStatus(transaction).getStatus());
 			assertFalse(BlocksApi.getBlocks(transaction.getId(), BlockStatus.VALID).isEmpty());
 
-		} catch (IOException | InvalidKeySpecException | StatusException e) {
+		} catch (IOException | InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
 	}

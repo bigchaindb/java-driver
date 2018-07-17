@@ -22,9 +22,6 @@ public enum BigchainDbApi {
 	/** The outputs. */
 	OUTPUTS("/outputs"),
 	
-	/** The statuses. */
-	STATUSES("/statuses"),
-	
 	/** The blocks. */
 	BLOCKS("/blocks"),
 	
