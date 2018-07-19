@@ -26,7 +26,7 @@ public class Asset implements Serializable {
 
 	/** the data class the type of the data class needed for serialization/deserialization */
 	@Exclude
-	private Class dataClass;
+	private Class dataClass = com.google.gson.internal.LinkedTreeMap.class;
 
 	/**
 	 * Instantiates a new asset.

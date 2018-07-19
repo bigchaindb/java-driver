@@ -1,57 +1,91 @@
 package com.authenteq.api;
 
-import static org.junit.Assert.assertFalse;
-
-import java.io.IOException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Map;
-import java.util.TreeMap;
-
+import com.authenteq.model.Block;
 import org.junit.Test;
 
-import com.authenteq.builders.BigchainDbTransactionBuilder;
-import com.authenteq.constants.Operations;
-import com.authenteq.model.Account;
-import com.authenteq.model.Transaction;
+import java.io.IOException;
+import java.util.List;
 
-import net.i2p.crypto.eddsa.EdDSAPrivateKey;
-import net.i2p.crypto.eddsa.EdDSAPublicKey;
+import static org.junit.Assert.assertTrue;
 
 /**
  * The Class BlocksApiTest.
  */
-public class BlocksApiTest extends AbstractApiTest
-{
-	private String publicKey = "302a300506032b657003210033c43dc2180936a2a9138a05f06c892d2fb1cfda4562cbc35373bf13cd8ed373";
-	private String privateKey = "302e020100300506032b6570042204206f6b0cd095f1e83fc5f08bffb79c7c8a30e77a3ab65f4bc659026b76394fcea8";
+public class BlocksApiTest extends AbstractApiTest {
 
-	/**
-	 * Test asset search.
-	 * @throws InterruptedException
-	 */
-	@Test
-	public void testBlockSearch() throws InterruptedException {
-		try {
-			Map<String, String> metaData = new TreeMap<String, String>() {{ put( "what", "My first BigchainDB transaction" ); }};
-			Map<String, String> assetData = new TreeMap<String, String>() {{
-				put( "middlename", "mname" );
-				put("firstname", "John");
-				put( "giddlename", "mname" );
-				put( "ziddlename", "mname" );
-				put( "lastname", "Smith" );
-			}};
+    public static String V1_BLOCK_JSON = "{\n" +
+            "  \"height\": 1,\n" +
+            "  \"transactions\": [\n" +
+            "    {\n" +
+            "      \"asset\": {\n" +
+            "        \"data\": {\n" +
+            "          \"msg\": \"Hello BigchainDB!\"\n" +
+            "        }\n" +
+            "      },\n" +
+            "      \"id\": \"4957744b3ac54434b8270f2c854cc1040228c82ea4e72d66d2887a4d3e30b317\",\n" +
+            "      \"inputs\": [\n" +
+            "        {\n" +
+            "          \"fulfillment\": \"pGSAIDE5i63cn4X8T8N1sZ2mGkJD5lNRnBM4PZgI_zvzbr-cgUCy4BR6gKaYT-tdyAGPPpknIqI4JYQQ-p2nCg3_9BfOI-15vzldhyz-j_LZVpqAlRmbTzKS-Q5gs7ZIFaZCA_UD\",\n" +
+            "          \"fulfills\": null,\n" +
+            "          \"owners_before\": [\n" +
+            "            \"4K9sWUMFwTgaDGPfdynrbxWqWS6sWmKbZoTjxLtVUibD\"\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      ],\n" +
+            "      \"metadata\": {\n" +
+            "        \"sequence\": 0\n" +
+            "      },\n" +
+            "      \"operation\": \"CREATE\",\n" +
+            "      \"outputs\": [\n" +
+            "        {\n" +
+            "          \"amount\": \"1\",\n" +
+            "          \"condition\": {\n" +
+            "            \"details\": {\n" +
+            "              \"public_key\": \"4K9sWUMFwTgaDGPfdynrbxWqWS6sWmKbZoTjxLtVUibD\",\n" +
+            "              \"type\": \"ed25519-sha-256\"\n" +
+            "            },\n" +
+            "            \"uri\": \"ni:///sha-256;PNYwdxaRaNw60N6LDFzOWO97b8tJeragczakL8PrAPc?fpt=ed25519-sha-256&cost=131072\"\n" +
+            "          },\n" +
+            "          \"public_keys\": [\n" +
+            "            \"4K9sWUMFwTgaDGPfdynrbxWqWS6sWmKbZoTjxLtVUibD\"\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      ],\n" +
+            "      \"version\": \"2.0\"\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
 
-			Transaction transaction = BigchainDbTransactionBuilder
-                      .init()
-                      .addAssets(assetData, TreeMap.class)
-                      .operation(Operations.CREATE)
-                      .buildAndSign((EdDSAPublicKey) Account.publicKeyFromHex(publicKey), (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
-                      .sendTransaction();
+    public static String V1_BLOCK_BY_TRANS_JSON = "[\n" +
+            "  1\n" +
+            "]";
 
-			assertFalse(BlocksApi.getBlocksByTransactionId(transaction.getId()).isEmpty());
 
-		} catch (IOException | InvalidKeySpecException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Test get block.
+     */
+    @Test
+    public void testGetBlock() {
+        try {
+            Block block = BlocksApi.getBlock("1");
+            assertTrue(block.getHeight() == 1);
+            assertTrue(block.getTransactions().size() == 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get block.
+     */
+    @Test
+    public void testGetBlockByTransactionId() {
+        try {
+            List<String> list = BlocksApi.getBlocksByTransactionId("4957744b3ac54434b8270f2c854cc1040228c82ea4e72d66d2887a4d3e30b317");
+            assertTrue(list.size() == 1);
+            assertTrue(list.get(0).equals("1"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

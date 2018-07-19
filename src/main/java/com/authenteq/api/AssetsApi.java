@@ -25,7 +25,7 @@ public class AssetsApi {
 	 */
 	public static Assets getAssets(String searchKey) throws IOException {
 		log.debug( "getAssets Call :" + searchKey );
-		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.ASSETS + "?search="+ searchKey);
+		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.ASSETS + "/?search="+ searchKey);
 		String body = response.body().string();
 		response.close();
 		return JsonUtils.fromJson(body, Assets.class);
@@ -41,7 +41,7 @@ public class AssetsApi {
 	 */
 	public static Assets getAssetsWithLimit(String searchKey, String limit) throws IOException {
 		log.debug( "getAssetsWithLimit Call :" + searchKey + " limit " + limit );
-		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.ASSETS + "?search="+ searchKey+ "&limit=" + limit);
+		Response response = NetworkUtils.sendGetRequest(BigChainDBGlobals.getBaseUrl() + BigchainDbApi.ASSETS + "/?search="+ searchKey+ "&limit=" + limit);
 		String body = response.body().string();
 		response.close();
 		return JsonUtils.fromJson(body, Assets.class);
