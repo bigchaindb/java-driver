@@ -1,8 +1,6 @@
 package com.authenteq.util;
 
 
-
-
 /**
  * BreadWallet
  * <p/>
@@ -29,17 +27,25 @@ package com.authenteq.util;
  */
 public class Base58 {
 
-    /** The Constant ALPHABET. */
+    /**
+     * The Constant ALPHABET.
+     */
     private static final char[] ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
             .toCharArray();
-    
-    /** The Constant BASE_58. */
+
+    /**
+     * The Constant BASE_58.
+     */
     private static final int BASE_58 = ALPHABET.length;
-    
-    /** The Constant BASE_256. */
+
+    /**
+     * The Constant BASE_256.
+     */
     private static final int BASE_256 = 256;
 
-    /** The Constant INDEXES. */
+    /**
+     * The Constant INDEXES.
+     */
     private static final int[] INDEXES = new int[128];
 
     static {
@@ -59,10 +65,7 @@ public class Base58 {
      * @return the string
      */
     public static String encode(byte[] input) {
-        if (input.length == 0) {
-            // paying with the same coin
-            return "";
-        }
+        if (input.length == 0) return "";
 
         //
         // Make a copy of the input since we are going to modify it.
@@ -73,9 +76,7 @@ public class Base58 {
         // Count leading zeroes
         //
         int zeroCount = 0;
-        while (zeroCount < input.length && input[zeroCount] == 0) {
-            ++zeroCount;
-        }
+        while (zeroCount < input.length && input[zeroCount] == 0) ++zeroCount;
 
         //
         // The actual encoding
@@ -96,16 +97,12 @@ public class Base58 {
         //
         // Strip extra '1' if any
         //
-        while (j < temp.length && temp[j] == ALPHABET[0]) {
-            ++j;
-        }
+        while (j < temp.length && temp[j] == ALPHABET[0]) ++j;
 
         //
         // Add as many leading '1' as there were leading zeros.
         //
-        while (--zeroCount >= 0) {
-            temp[--j] = (byte) ALPHABET[0];
-        }
+        while (--zeroCount >= 0) temp[--j] = (byte) ALPHABET[0];
 
         byte[] output = copyOfRange(temp, j, temp.length);
         return new String(output);
@@ -118,10 +115,7 @@ public class Base58 {
      * @return the byte[]
      */
     public static byte[] decode(String input) {
-        if (input.length() == 0) {
-            // paying with the same coin
-            return new byte[0];
-        }
+        if (input.length() == 0) return new byte[0];
 
         byte[] input58 = new byte[input.length()];
         //
@@ -134,9 +128,7 @@ public class Base58 {
             if (c >= 0 && c < 128) {
                 digit58 = INDEXES[c];
             }
-            if (digit58 < 0) {
-                throw new RuntimeException("Not a Base58 input: " + input);
-            }
+            if (digit58 < 0) throw new RuntimeException("Not a Base58 input: " + input);
 
             input58[i] = (byte) digit58;
         }
@@ -145,9 +137,7 @@ public class Base58 {
         // Count leading zeroes
         //
         int zeroCount = 0;
-        while (zeroCount < input58.length && input58[zeroCount] == 0) {
-            ++zeroCount;
-        }
+        while (zeroCount < input58.length && input58[zeroCount] == 0) ++zeroCount;
 
         //
         // The encoding
@@ -178,7 +168,7 @@ public class Base58 {
     /**
      * Divmod 58.
      *
-     * @param number the number
+     * @param number  the number
      * @param startAt the start at
      * @return the byte
      */
@@ -200,7 +190,7 @@ public class Base58 {
      * Divmod 256.
      *
      * @param number58 the number 58
-     * @param startAt the start at
+     * @param startAt  the start at
      * @return the byte
      */
     private static byte divmod256(byte[] number58, int startAt) {
@@ -221,8 +211,8 @@ public class Base58 {
      * Copy of range.
      *
      * @param source the source
-     * @param from the from
-     * @param to the to
+     * @param from   the from
+     * @param to     the to
      * @return the byte[]
      */
     private static byte[] copyOfRange(byte[] source, int from, int to) {

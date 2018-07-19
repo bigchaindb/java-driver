@@ -276,7 +276,7 @@ public class TransactionApiTest extends AbstractApiTest {
                             (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
                     .sendTransaction();
 
-            System.out.println("abc" + transaction.toString());
+            assertTrue(transaction.getAsset().getData() != null);
         } catch (Exception e) {
             e.printStackTrace();
         }

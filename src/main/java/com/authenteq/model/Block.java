@@ -32,30 +32,12 @@ public class Block {
     }
 
     /**
-     * Sets the height.
-     *
-     * @param height the new height
-     */
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    /**
      * Gets the transactions.
      *
      * @return the transactions
      */
     public List<Transaction> getTransactions() {
         return transactions;
-    }
-
-    /**
-     * Sets the transactions.
-     *
-     * @param transactions the new transactions
-     */
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
     }
 
 }

@@ -177,8 +177,7 @@ public class BigchainDbConfigBuilder {
 			public Response intercept(Interceptor.Chain chain) throws IOException {
 				Request originalRequest = chain.request();
 
-				if (tokens == null)
-					return chain.proceed(originalRequest);
+				if (tokens == null) return chain.proceed(originalRequest);
 
 				// Add authorization header with updated authorization value to
 				// intercepted request

@@ -2,8 +2,13 @@ package com.authenteq.api;
 
 import com.authenteq.AbstractTest;
 import com.authenteq.builders.BigchainDbConfigBuilder;
+import com.authenteq.model.Account;
+import com.authenteq.model.ApiEndpoints;
+import com.authenteq.model.BigChainDBGlobals;
+import com.authenteq.ws.MessageHandler;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static com.authenteq.api.AssetsApiTest.V1_ASSET_JSON;
 import static com.authenteq.api.AssetsApiTest.V1_ASSET_LIMIT_JSON;
@@ -13,6 +18,7 @@ import static com.authenteq.api.OutputsApiTest.*;
 import static com.authenteq.api.TransactionApiTest.*;
 import static com.authenteq.api.ValidatorsApiTest.V1_VALIDATORS_JSON;
 import static net.jadler.Jadler.*;
+import static org.junit.Assert.assertTrue;
 
 public class AbstractApiTest extends AbstractTest {
 
@@ -117,13 +123,44 @@ public class AbstractApiTest extends AbstractTest {
                 .withStatus(200);
         BigchainDbConfigBuilder
                 .baseUrl("http://localhost:" + port())
-                .addToken("app_id", "")
-                .addToken("app_key", "")
+                .addToken("app_id", "2bbaf3ff")
+                .addToken("app_key", "c929b708177dcc8b9d58180082029b8d")
+                .webSocketMonitor(new MessageHandler() {
+                    @Override
+                    public void handleMessage(String message) {
+                    }
+                })
                 .setup();
+
     }
 
     @AfterClass
     public static void tearDown() {
         closeJadler();
+    }
+
+    /**
+     * Test db globals.
+     */
+    @Test
+    public void testBigChainDBGlobals() {
+        assertTrue(BigChainDBGlobals.getWsSocketUrl().endsWith("/api/v1/streams/valid_transactions"));
+        assertTrue(BigChainDBGlobals.getAuthorizationTokens().get("app_id").equals("2bbaf3ff"));
+        assertTrue(BigChainDBGlobals.getAuthorizationTokens().get("app_key").equals("c929b708177dcc8b9d58180082029b8d"));
+    }
+
+    /**
+     * Test api endpoints.
+     */
+    @Test
+    public void testApiEndpoints() {
+        ApiEndpoints api = BigChainDBGlobals.getApiEndpoints();
+        assertTrue(api.getAssets().equals("/assets/"));
+        assertTrue(api.getDocs().equals("https://docs.bigchaindb.com/projects/server/en/v2.0.0b2/http-client-server-api.html"));
+        assertTrue(api.getMetadata().equals("/metadata/"));
+        assertTrue(api.getOutputs().equals("/outputs/"));
+        assertTrue(api.getStreams().equals("ws://localhost:9985/api/v1/streams/valid_transactions"));
+        assertTrue(api.getTransactions().equals("/transactions/"));
+        assertTrue(api.getValidators().equals("/validators"));
     }
 }
