@@ -10,9 +10,7 @@ import static com.authenteq.api.AssetsApiTest.V1_ASSET_LIMIT_JSON;
 import static com.authenteq.api.BlocksApiTest.V1_BLOCK_BY_TRANS_JSON;
 import static com.authenteq.api.BlocksApiTest.V1_BLOCK_JSON;
 import static com.authenteq.api.OutputsApiTest.*;
-import static com.authenteq.api.TransactionApiTest.TRANSACTION_ID;
-import static com.authenteq.api.TransactionApiTest.V1_GET_TRANSACTION_BY_ASSETS_JSON;
-import static com.authenteq.api.TransactionApiTest.V1_GET_TRANSACTION_JSON;
+import static com.authenteq.api.TransactionApiTest.*;
 import static com.authenteq.api.ValidatorsApiTest.V1_VALIDATORS_JSON;
 import static net.jadler.Jadler.*;
 
@@ -110,6 +108,12 @@ public class AbstractApiTest extends AbstractTest {
                 .havingParameterEqualTo("operation", "TRANSFER")
                 .respond()
                 .withBody(V1_GET_TRANSACTION_BY_ASSETS_JSON)
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/api/v1/transactions")
+                .respond()
+                .withBody(V1_POST_TRANSACTION_JSON)
                 .withStatus(200);
         BigchainDbConfigBuilder
                 .baseUrl("http://localhost:" + port())

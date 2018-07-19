@@ -250,6 +250,10 @@ public class TransactionApiTest extends AbstractApiTest {
         }
     }
 
+    public class MetaData {
+        public Integer sequence = 0;
+    }
+
     /**
      * Test post transaction using builder.
      *
@@ -257,45 +261,23 @@ public class TransactionApiTest extends AbstractApiTest {
      */
     @Test
     public void testPostTransactionUsingBuilder() throws InvalidKeySpecException {
-
-        net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
-        KeyPair keyPair = edDsaKpg.generateKeyPair();
-        Account account = null;
         try {
-
-            account = AccountApi.loadAccount(publicKey, privateKey);
-        } catch (InvalidKeySpecException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
-        ObjectDummy dummyAsset = new ObjectDummy();
-        dummyAsset.setId("id");
-        dummyAsset.setDescription("asset");
-
-        try {
-            Map<String, String> metaData = new TreeMap<String, String>() {{
-                put("what", "My first BigchainDB transaction");
-                put("aaa", JsonUtils.toJson(dummyAsset));
-            }};
             Map<String, String> assetData = new TreeMap<String, String>() {{
-                put("middlename", "mname");
-                put("firstname", "John");
-                put("giddlename", "mname");
-                put("ziddlename", "mname");
-                put("lastname", "Smith");
-                put("aa", JsonUtils.toJson(dummyAsset));
+                put("msg", "Hello BigchainDB!");
             }};
+
             Transaction transaction = BigchainDbTransactionBuilder
                     .init()
                     .addAssets(assetData, TreeMap.class)
-                    .addMetaData(metaData)
+                    .addMetaData(new MetaData())
                     .operation(Operations.CREATE)
-                    .buildAndSign((EdDSAPublicKey) Account.publicKeyFromHex(publicKey), (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
+                    .buildAndSign(
+                            (EdDSAPublicKey) Account.publicKeyFromHex(publicKey),
+                            (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
                     .sendTransaction();
 
-            assertNotNull(transaction.toString());
-        } catch (IOException e) {
+            System.out.println("abc" + transaction.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -397,43 +379,6 @@ public class TransactionApiTest extends AbstractApiTest {
             Assert.assertEquals(2, resultMetaData.porperty2.intValue());
             Assert.assertEquals(3, resultMetaData.properties.size());
             Assert.assertEquals("three", resultMetaData.properties.get(2));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Test transaction by asset id create.
-     */
-    @Test
-    public void testTransactionByAssetIdCreate() {
-        try {
-            net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
-            KeyPair keyPair = edDsaKpg.generateKeyPair();
-
-            ObjectDummy dummyAsset = new ObjectDummy();
-            dummyAsset.setId("id");
-            dummyAsset.setDescription("asset");
-            System.out.println(dummyAsset.toMapString());
-
-            ObjectDummy dummyMeta = new ObjectDummy();
-            dummyMeta.setId("id");
-            dummyMeta.setDescription("meta");
-
-            Transaction transaction = BigchainDbTransactionBuilder.init().addAssets(dummyAsset, ObjectDummy.class).addMetaData(dummyMeta)
-                    .operation(Operations.CREATE)
-                    .buildAndSign((EdDSAPublicKey) keyPair.getPublic(), (EdDSAPrivateKey) keyPair.getPrivate())
-                    .sendTransaction();
-
-            System.out.println(TransactionsApi
-                    .getTransactionsByAssetId(transaction.getId(),
-                            Operations.CREATE)
-                    .getTransactions().size());
-
-            TransactionsApi
-                    .getTransactionsByAssetId(transaction.getId(),
-                            Operations.CREATE)
-                    .getTransactions();
         } catch (IOException e) {
             e.printStackTrace();
         }
