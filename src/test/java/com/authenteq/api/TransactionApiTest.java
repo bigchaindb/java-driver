@@ -2,11 +2,14 @@ package com.authenteq.api;
 
 import com.authenteq.builders.BigchainDbTransactionBuilder;
 import com.authenteq.constants.Operations;
+import com.authenteq.json.strategy.MetaDataDeserializer;
+import com.authenteq.json.strategy.MetaDataSerializer;
 import com.authenteq.json.strategy.TransactionDeserializer;
 import com.authenteq.json.strategy.TransactionsDeserializer;
 import com.authenteq.model.*;
 import com.authenteq.util.JsonUtils;
 import com.authenteq.util.KeyPairUtils;
+import com.authenteq.util.TypeAdapter;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import okhttp3.Response;
@@ -252,10 +255,6 @@ public class TransactionApiTest extends AbstractApiTest {
         }
     }
 
-    public class MetaData {
-        public Integer sequence = 0;
-    }
-
     /**
      * Test post transaction using builder.
      *
@@ -268,27 +267,30 @@ public class TransactionApiTest extends AbstractApiTest {
                 put("msg", "Hello BigchainDB!");
             }};
 
-            FulFill fulFill = new FulFill();
-            fulFill.setOutputIndex("0");
-            fulFill.setTransactionId("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e");
+            JsonUtils.addTypeAdapterDeserializer(MetaDatas.class, new MetaDataDeserializer());
+            JsonUtils.addTypeAdapterSerializer(MetaData.class, new MetaDataSerializer());
+
+            MetaData metaData = new MetaData();
+            metaData.setId("51ce82a14ca274d43e4992bbce41f6fdeb755f846e48e710a3bbb3b0cf8e4204");
+            metaData.setMetaData("msg", "Hello BigchainDB 1!");
 
             Transaction transaction = BigchainDbTransactionBuilder
                     .init()
                     .addAssets(assetData, TreeMap.class)
-                    .addMetaData(new MetaData())
-                    .addOutput("1")
-                    .addInput("pGSAIDPEPcIYCTaiqROKBfBsiS0vsc_aRWLLw1NzvxPNjtNzgUBbqDl7BCsn--TiYGWJKUtMDvat-ipunoo0qsmH9DgpBItEypOParliuVYAJjAX9-sDX17IoHPlpDfTGCxpR80B", fulFill)
+                    .addMetaData(metaData)
                     .operation(Operations.CREATE)
-                    .buildOnly((EdDSAPublicKey) Account.publicKeyFromHex(publicKey));
+                    .buildAndSignOnly(
+                            (EdDSAPublicKey) Account.publicKeyFromHex(publicKey),
+                            (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey));
 
             assertTrue(transaction.getVersion().equals("2.0"));
             assertTrue(transaction.getAsset().getData() != null);
+            assertTrue(transaction.getSigned());
 
             Input input = transaction.getInputs().get(0);
             assertTrue(input.getOwnersBefore() != null);
             assertTrue(input.getFullFillment() != null);
-            assertTrue(input.getFulFills().getOutputIndex().equals("0"));
-            assertTrue(input.getFulFills().getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+            assertTrue(input.getFulFills() == null);
 
             Output output = transaction.getOutputs().get(0);
             assertTrue(output.getAmount() != null);
@@ -296,6 +298,15 @@ public class TransactionApiTest extends AbstractApiTest {
             assertTrue(output.getCondition().getDetails().getPublicKey() != null);
             assertTrue(output.getCondition().getDetails().getType() != null);
             assertTrue(output.getPublicKeys() != null);
+
+            FulFill fulFill = new FulFill();
+            fulFill.setOutputIndex("0");
+            fulFill.setTransactionId("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e");
+            assertTrue(fulFill.getOutputIndex().equals("0"));
+            assertTrue(fulFill.getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+
+            assertTrue(((MetaData) transaction.getMetaData()).getMetadata().get("msg").equals("Hello BigchainDB 1!"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

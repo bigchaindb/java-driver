@@ -23,12 +23,14 @@ public class JsonUtils {
         put(Transaction.class.getCanonicalName(), new TypeAdapter(Transaction.class, new TransactionDeserializer()));
         put(Transactions.class.getCanonicalName(), new TypeAdapter(Transactions.class, new TransactionsDeserializer()));
         put(Assets.class.getCanonicalName(), new TypeAdapter(Assets.class, new AssetsDeserializer()));
+        put(MetaDatas.class.getCanonicalName(), new TypeAdapter(MetaDatas.class, new MetaDataDeserializer()));
         put(Outputs.class.getCanonicalName(), new TypeAdapter(Outputs.class, new OutputsDeserializer()));
         put(Validators.class.getCanonicalName(), new TypeAdapter(Validators.class, new ValidatorDeserializer()));
     }};
 
     private static Map<String, TypeAdapter> typeAdaptersSerialize = new ConcurrentHashMap<String, TypeAdapter>(16) {{
         put(Asset.class.getCanonicalName(), new TypeAdapter(Asset.class, new AssetSerializer()));
+        put(MetaData.class.getCanonicalName(), new TypeAdapter(MetaData.class, new MetaDataSerializer()));
     }};
 
     private static synchronized GsonBuilder base() {
@@ -76,10 +78,6 @@ public class JsonUtils {
                 .forEach(value -> builder.registerTypeAdapter(value.getType(), value.getSerializer()));
 
         return builder.setExclusionStrategies(exclusionStrategies).create();
-    }
-
-    public static void setJsonDateFormat(final String dateFormat) {
-        jsonDateFormat = dateFormat;
     }
 
     /**

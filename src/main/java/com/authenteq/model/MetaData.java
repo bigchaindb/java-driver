@@ -12,80 +12,42 @@ import java.util.TreeMap;
  */
 public class MetaData {
 	
-	/** The sequence. */
-	@SerializedName("sequence")
-	private Integer sequence = 0;
+	/** The id. */
+	@SerializedName("id")
+	private String id;
 	
-	/** The data. */
-	@SerializedName("data")
-	private Map<String,String> data;
-
-	/**
-	 * Instantiates a new meta data.
-	 */
-	public MetaData() {
-	}
+	/** The metadata. */
+	@SerializedName("metadata")
+	private Map<String,String> metadata = new TreeMap<String, String>();
 	
 	/**
-	 * Instantiates a new meta data.
+	 * Gets the id.
 	 *
-	 * @param data the data
+	 * @return the id
 	 */
-	public MetaData(Map<String,String> data) {
-		this.data = data;
-	}
-	
-	
-	/**
-	 * Gets the sequence.
-	 *
-	 * @return the sequence
-	 */
-	public Integer getSequence() {
-		return sequence;
+	public String getId() {
+		return id;
 	}
 
 	/**
-	 * Sets the sequence.
+	 * Sets the id.
 	 *
-	 * @param sequence the new sequence
+	 * @param id the new id
 	 */
-	public void setSequence(Integer sequence) {
-		this.sequence = sequence;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**
-	 * Gets the data.
+	 * Gets the metadata.
 	 *
-	 * @return the data
+	 * @return the metadata
 	 */
-	public Map<String, String> getData() {
-		return data;
+	public Map<String, String> getMetadata() {
+		return metadata;
 	}
 
-	/**
-	 * Sets the data.
-	 *
-	 * @param data the data
-	 */
-	public void setData(Map<String, String> data) {
-		this.data = data;
+	public void setMetaData(String key, String value) {
+		this.metadata.put(key, value);
 	}
-	
-	/**
-	 * Adds the meta data.
-	 *
-	 * @param key the key
-	 * @param value the value
-	 * @return the meta data
-	 */
-	public MetaData addMetaData(String key, String value) {
-		if(this.data == null) {
-			this.data = new TreeMap<String,String>();
-		}
-		this.data.put(key, value);
-		return this;
-	}
-	
-
 }

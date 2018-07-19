@@ -14,6 +14,8 @@ import static com.authenteq.api.AssetsApiTest.V1_ASSET_JSON;
 import static com.authenteq.api.AssetsApiTest.V1_ASSET_LIMIT_JSON;
 import static com.authenteq.api.BlocksApiTest.V1_BLOCK_BY_TRANS_JSON;
 import static com.authenteq.api.BlocksApiTest.V1_BLOCK_JSON;
+import static com.authenteq.api.MetaDataApiTest.V1_METADATA_JSON;
+import static com.authenteq.api.MetaDataApiTest.V1_METADATA_LIMIT_JSON;
 import static com.authenteq.api.OutputsApiTest.*;
 import static com.authenteq.api.TransactionApiTest.*;
 import static com.authenteq.api.ValidatorsApiTest.V1_VALIDATORS_JSON;
@@ -64,6 +66,21 @@ public class AbstractApiTest extends AbstractTest {
                 .havingParameterEqualTo("limit", "2")
                 .respond()
                 .withBody(V1_ASSET_LIMIT_JSON)
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/api/v1/metadata/")
+                .havingParameterEqualTo("search", "bigchaindb")
+                .respond()
+                .withBody(V1_METADATA_JSON)
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/api/v1/metadata/")
+                .havingParameterEqualTo("search", "bigchaindb")
+                .havingParameterEqualTo("limit", "2")
+                .respond()
+                .withBody(V1_METADATA_LIMIT_JSON)
                 .withStatus(200);
         onRequest()
                 .havingMethodEqualTo("GET")

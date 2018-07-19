@@ -18,6 +18,9 @@ public enum BigchainDbApi {
 	/** The assets. */
 	//	Core models
 	ASSETS("/assets"),
+
+	/** The metadata. */
+	METADATA("/metadata"),
 	
 	/** The outputs. */
 	OUTPUTS("/outputs"),
