@@ -116,16 +116,7 @@ public class Output implements Serializable {
 	public List<String> getPublicKeys() {
 		return publicKeys;
 	}
-	
-	/**
-	 * Sets the public keys.
-	 *
-	 * @param publicKeys the new public keys
-	 */
-	public void setPublicKeys(List<String> publicKeys) {
-		this.publicKeys = publicKeys;
-	}
-	
+
 	/**
 	 * Adds the public key.
 	 *

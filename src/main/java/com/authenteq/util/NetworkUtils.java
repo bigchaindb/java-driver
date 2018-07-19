@@ -24,9 +24,9 @@ public class NetworkUtils {
     /**
      * Send post request.
      *
-     * @param url         the url
-     * @param body        the body
-     * @param callback    the callback
+     * @param url      the url
+     * @param body     the body
+     * @param callback the callback
      */
     public static void sendPostRequest(String url, RequestBody body,
                                        final GenericCallback callback) {
@@ -41,13 +41,9 @@ public class NetworkUtils {
 
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.code() == 202) {
-                    callback.pushedSuccessfully(response);
-                } else if (response.code() == 400) {
-                    callback.transactionMalformed(response);
-                } else {
-                    callback.otherError(response);
-                }
+                if (response.code() == 202) callback.pushedSuccessfully(response);
+                else if (response.code() == 400) callback.transactionMalformed(response);
+                else callback.otherError(response);
                 response.close();
             }
         });

@@ -23,15 +23,6 @@ public class Assets {
 	}
 
 	/**
-	 * Sets the assets.
-	 *
-	 * @param assets the new assets
-	 */
-	public void setAssets(List<Asset> assets) {
-		this.assets = assets;
-	}
-
-	/**
 	 * Adds the asset.
 	 *
 	 * @param asset the asset

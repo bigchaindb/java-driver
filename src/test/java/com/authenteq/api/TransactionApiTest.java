@@ -6,9 +6,11 @@ import com.authenteq.json.strategy.TransactionDeserializer;
 import com.authenteq.json.strategy.TransactionsDeserializer;
 import com.authenteq.model.*;
 import com.authenteq.util.JsonUtils;
+import com.authenteq.util.KeyPairUtils;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import okhttp3.Response;
+import org.interledger.cryptoconditions.types.Ed25519Sha256Condition;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -260,23 +262,40 @@ public class TransactionApiTest extends AbstractApiTest {
      * @throws InvalidKeySpecException
      */
     @Test
-    public void testPostTransactionUsingBuilder() throws InvalidKeySpecException {
+    public void testBuildTransaction() {
         try {
             Map<String, String> assetData = new TreeMap<String, String>() {{
                 put("msg", "Hello BigchainDB!");
             }};
 
+            FulFill fulFill = new FulFill();
+            fulFill.setOutputIndex("0");
+            fulFill.setTransactionId("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e");
+
             Transaction transaction = BigchainDbTransactionBuilder
                     .init()
                     .addAssets(assetData, TreeMap.class)
                     .addMetaData(new MetaData())
+                    .addOutput("1")
+                    .addInput("pGSAIDPEPcIYCTaiqROKBfBsiS0vsc_aRWLLw1NzvxPNjtNzgUBbqDl7BCsn--TiYGWJKUtMDvat-ipunoo0qsmH9DgpBItEypOParliuVYAJjAX9-sDX17IoHPlpDfTGCxpR80B", fulFill)
                     .operation(Operations.CREATE)
-                    .buildAndSign(
-                            (EdDSAPublicKey) Account.publicKeyFromHex(publicKey),
-                            (EdDSAPrivateKey) Account.privateKeyFromHex(privateKey))
-                    .sendTransaction();
+                    .buildOnly((EdDSAPublicKey) Account.publicKeyFromHex(publicKey));
 
+            assertTrue(transaction.getVersion().equals("2.0"));
             assertTrue(transaction.getAsset().getData() != null);
+
+            Input input = transaction.getInputs().get(0);
+            assertTrue(input.getOwnersBefore() != null);
+            assertTrue(input.getFullFillment() != null);
+            assertTrue(input.getFulFills().getOutputIndex().equals("0"));
+            assertTrue(input.getFulFills().getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+
+            Output output = transaction.getOutputs().get(0);
+            assertTrue(output.getAmount() != null);
+            assertTrue(output.getCondition().getUri() != null);
+            assertTrue(output.getCondition().getDetails().getPublicKey() != null);
+            assertTrue(output.getCondition().getDetails().getType() != null);
+            assertTrue(output.getPublicKeys() != null);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -109,63 +109,6 @@ public class Base58 {
     }
 
     /**
-     * Decode.
-     *
-     * @param input the input
-     * @return the byte[]
-     */
-    public static byte[] decode(String input) {
-        if (input.length() == 0) return new byte[0];
-
-        byte[] input58 = new byte[input.length()];
-        //
-        // Transform the String to a base58 byte sequence
-        //
-        for (int i = 0; i < input.length(); ++i) {
-            char c = input.charAt(i);
-
-            int digit58 = -1;
-            if (c >= 0 && c < 128) {
-                digit58 = INDEXES[c];
-            }
-            if (digit58 < 0) throw new RuntimeException("Not a Base58 input: " + input);
-
-            input58[i] = (byte) digit58;
-        }
-
-        //
-        // Count leading zeroes
-        //
-        int zeroCount = 0;
-        while (zeroCount < input58.length && input58[zeroCount] == 0) ++zeroCount;
-
-        //
-        // The encoding
-        //
-        byte[] temp = new byte[input.length()];
-        int j = temp.length;
-
-        int startAt = zeroCount;
-        while (startAt < input58.length) {
-            byte mod = divmod256(input58, startAt);
-            if (input58[startAt] == 0) {
-                ++startAt;
-            }
-
-            temp[--j] = mod;
-        }
-
-        //
-        // Do no add extra leading zeroes, move j to first non null byte.
-        //
-        while (j < temp.length && temp[j] == 0) {
-            ++j;
-        }
-
-        return copyOfRange(temp, j - zeroCount, temp.length);
-    }
-
-    /**
      * Divmod 58.
      *
      * @param number  the number
@@ -181,27 +124,6 @@ public class Base58 {
             number[i] = (byte) (temp / BASE_58);
 
             remainder = temp % BASE_58;
-        }
-
-        return (byte) remainder;
-    }
-
-    /**
-     * Divmod 256.
-     *
-     * @param number58 the number 58
-     * @param startAt  the start at
-     * @return the byte
-     */
-    private static byte divmod256(byte[] number58, int startAt) {
-        int remainder = 0;
-        for (int i = startAt; i < number58.length; i++) {
-            int digit58 = (int) number58[i] & 0xFF;
-            int temp = remainder * BASE_58 + digit58;
-
-            number58[i] = (byte) (temp / BASE_256);
-
-            remainder = temp % BASE_256;
         }
 
         return (byte) remainder;

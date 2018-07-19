@@ -71,15 +71,6 @@ public class Input implements Serializable {
 	}
 
 	/**
-	 * Sets the owners before.
-	 *
-	 * @param ownersBefore the new owners before
-	 */
-	public void setOwnersBefore(List<String> ownersBefore) {
-		this.ownersBefore = ownersBefore;
-	}
-	
-	/**
 	 * Adds the owner.
 	 *
 	 * @param owner the owner

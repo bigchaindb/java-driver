@@ -27,16 +27,7 @@ public class Condition implements Serializable {
 	 */
 	public Condition() {
 	}
-	
-	/**
-	 * Instantiates a new condition.
-	 *
-	 * @param details the details
-	 */
-	public Condition(Details details) {
-		this.details = details;
-	}
-	
+
 	/**
 	 * Instantiates a new condition.
 	 *
@@ -47,16 +38,6 @@ public class Condition implements Serializable {
 		this.details = details;
 		this.uri = uri;
 	}
-	
-	/**
-	 * Instantiates a new condition.
-	 *
-	 * @param uri the uri
-	 */
-	public Condition(String uri) {
-		this.uri = uri;
-	}
-	
 
 	/**
 	 * Gets the details.
@@ -68,15 +49,6 @@ public class Condition implements Serializable {
 	}
 
 	/**
-	 * Sets the details.
-	 *
-	 * @param details the new details
-	 */
-	public void setDetails(Details details) {
-		this.details = details;
-	}
-
-	/**
 	 * Gets the uri.
 	 *
 	 * @return the uri
@@ -85,13 +57,4 @@ public class Condition implements Serializable {
 		return uri;
 	}
 
-	/**
-	 * Sets the uri.
-	 *
-	 * @param uri the new uri
-	 */
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-	
 }

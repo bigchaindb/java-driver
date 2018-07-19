@@ -208,31 +208,13 @@ public class BigchainDbTransactionBuilder {
 
 		@Override
 		public ITransactionAttributes addOutput(String amount) {
-			Output output = new Output();
-			Ed25519Sha256Condition sha256Condition = new Ed25519Sha256Condition(this.publicKey);
-			output.setAmount(amount);
-			output.addPublicKey(KeyPairUtils.encodePublicKeyInBase58(this.publicKey));
-			Details details = new Details();
-			details.setPublicKey(KeyPairUtils.encodePublicKeyInBase58(this.publicKey));
-			details.setType("ed25519-sha-256");
-			output.setCondition(new Condition(details, sha256Condition.getUri().toString()));
-			this.transaction.addOutput(output);
-			return this;
+			return addOutput(amount, this.publicKey);
 		}
 
 		@Override
 		public ITransactionAttributes addOutput(String amount, EdDSAPublicKey publicKey) {
-			Output output = new Output();
-			Ed25519Sha256Condition sha256Condition = new Ed25519Sha256Condition(publicKey);
-			output.setAmount(amount);
-			output.addPublicKey(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-			Details details = new Details();
-			details.setPublicKey(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-			details.setType("ed25519-sha-256");
-			output.setCondition(new Condition(details, sha256Condition.getUri().toString()));
-			this.transaction.addOutput(output);
-
-			return this;
+			EdDSAPublicKey[] keys = new EdDSAPublicKey[] {publicKey};
+			return addOutput(amount, keys);
 		}
 
 		@Override
@@ -258,12 +240,8 @@ public class BigchainDbTransactionBuilder {
 
 		@Override
 		public ITransactionAttributes addInput(String fullfillment, FulFill fullFill, EdDSAPublicKey publicKey) {
-			Input input = new Input();
-			input.setFullFillment(fullfillment);
-			input.setFulFills(fullFill);
-			input.addOwner(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-			this.transaction.addInput(input);
-			return this;
+			EdDSAPublicKey[] keys = new EdDSAPublicKey[] {publicKey};
+			return addInput(fullfillment, fullFill, keys);
 		}
 
 		@Override
