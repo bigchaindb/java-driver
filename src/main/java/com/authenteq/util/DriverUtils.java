@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  * Contributors:
- *     Bohdan Bezpartochnyi <bohdan@authenteq.com>
+ *     Bohdan Bezpartochnyi <bohdan@com.authenteq.com>
  */
 
 package com.authenteq.util;
@@ -24,6 +24,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The Class DriverUtils.
@@ -81,7 +85,9 @@ public class DriverUtils {
 
         JsonObject json = new JsonObject();
 
-        input.keySet().stream().sorted().forEach(key -> {
+        List<String> keys = new ArrayList<>(input.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
             JsonElement j = input.get(key);
             if (j instanceof JsonObject) {
                 json.add(key, makeSelfSortingGson((JsonObject) j));
@@ -101,7 +107,7 @@ public class DriverUtils {
             } else {
                 json.add(key, j);
             }
-        });
+        }
 
         return json;
     }

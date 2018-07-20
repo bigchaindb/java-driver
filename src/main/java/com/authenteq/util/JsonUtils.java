@@ -54,8 +54,12 @@ public class JsonUtils {
     public static Gson getGson() {
         GsonBuilder builder = base();
 
-        Stream.concat(typeAdaptersDeserialize.values().stream(), typeAdaptersSerialize.values().stream())
-                .forEach(value -> builder.registerTypeAdapter(value.getType(), value.getSerializer()));
+        for (TypeAdapter adapter : typeAdaptersDeserialize.values()) {
+            builder.registerTypeAdapter(adapter.getType(), adapter.getSerializer());
+        }
+        for (TypeAdapter adapter : typeAdaptersSerialize.values()) {
+            builder.registerTypeAdapter(adapter.getType(), adapter.getSerializer());
+        }
 
         return builder.create();
     }
@@ -73,9 +77,14 @@ public class JsonUtils {
     public static Gson getGson(Class ignoreClass, ExclusionStrategy... exclusionStrategies) {
         GsonBuilder builder = base();
 
-        Stream.concat(typeAdaptersDeserialize.values().stream(), typeAdaptersSerialize.values().stream())
-                .filter(value -> !value.getType().equals(ignoreClass))
-                .forEach(value -> builder.registerTypeAdapter(value.getType(), value.getSerializer()));
+        for (TypeAdapter adapter : typeAdaptersDeserialize.values()) {
+            if (!adapter.getType().equals(ignoreClass))
+                builder.registerTypeAdapter(adapter.getType(), adapter.getSerializer());
+        }
+        for (TypeAdapter adapter : typeAdaptersSerialize.values()) {
+            if (!adapter.getType().equals(ignoreClass))
+                builder.registerTypeAdapter(adapter.getType(), adapter.getSerializer());
+        }
 
         return builder.setExclusionStrategies(exclusionStrategies).create();
     }
