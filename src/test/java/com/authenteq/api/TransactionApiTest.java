@@ -256,7 +256,7 @@ public class TransactionApiTest extends AbstractApiTest {
     }
 
     /**
-     * Test post transaction using builder.
+     * Test build transaction using builder.
      *
      * @throws InvalidKeySpecException
      */
@@ -267,9 +267,6 @@ public class TransactionApiTest extends AbstractApiTest {
                 put("msg", "Hello BigchainDB!");
             }};
 
-            JsonUtils.addTypeAdapterDeserializer(MetaDatas.class, new MetaDataDeserializer());
-            JsonUtils.addTypeAdapterSerializer(MetaData.class, new MetaDataSerializer());
-
             MetaData metaData = new MetaData();
             metaData.setId("51ce82a14ca274d43e4992bbce41f6fdeb755f846e48e710a3bbb3b0cf8e4204");
             metaData.setMetaData("msg", "Hello BigchainDB 1!");
@@ -278,6 +275,8 @@ public class TransactionApiTest extends AbstractApiTest {
                     .init()
                     .addAssets(assetData, TreeMap.class)
                     .addMetaData(metaData)
+                    .addMetaDataClassSerializer(MetaData.class, new MetaDataSerializer())
+                    .addMetaDataClassDeserializer(MetaDatas.class, new MetaDataDeserializer())
                     .operation(Operations.CREATE)
                     .buildAndSignOnly(
                             (EdDSAPublicKey) Account.publicKeyFromHex(publicKey),
@@ -299,13 +298,54 @@ public class TransactionApiTest extends AbstractApiTest {
             assertTrue(output.getCondition().getDetails().getType() != null);
             assertTrue(output.getPublicKeys() != null);
 
+            assertTrue(((MetaData) transaction.getMetaData()).getMetadata().get("msg").equals("Hello BigchainDB 1!"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test build only transaction.
+     *
+     * @throws InvalidKeySpecException
+     */
+    @Test
+    public void testBuildOnlyTransaction() {
+        try {
+            Map<String, String> assetData = new TreeMap<String, String>() {{
+                put("msg", "Hello BigchainDB!");
+            }};
+
+            EdDSAPublicKey edDSAPublicKey = (EdDSAPublicKey) Account.publicKeyFromHex(publicKey);
             FulFill fulFill = new FulFill();
             fulFill.setOutputIndex("0");
             fulFill.setTransactionId("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e");
-            assertTrue(fulFill.getOutputIndex().equals("0"));
-            assertTrue(fulFill.getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
 
-            assertTrue(((MetaData) transaction.getMetaData()).getMetadata().get("msg").equals("Hello BigchainDB 1!"));
+            Transaction transaction = BigchainDbTransactionBuilder
+                    .init()
+                    .addAssets(assetData, TreeMap.class)
+                    .addInput("pGSAIDE5i63cn4X8T8N1sZ2mGkJD5lNRnBM4PZgI_zvzbr-cgUCy4BR6gKaYT-tdyAGPPpknIqI4JYQQ-p2nCg3_9BfOI-15vzldhyz-j_LZVpqAlRmbTzKS-Q5gs7ZIFaZCA_UD", fulFill, edDSAPublicKey)
+                    .addOutput("1", edDSAPublicKey)
+                    .operation(Operations.CREATE)
+                    .buildOnly(edDSAPublicKey);
+
+            assertTrue(transaction.getVersion().equals("2.0"));
+            assertTrue(transaction.getSigned() == null);
+
+            Input input = transaction.getInputs().get(0);
+            assertTrue(input.getOwnersBefore() != null);
+            assertTrue(input.getFullFillment() != null);
+            assertTrue(input.getFulFills() != null);
+            assertTrue(input.getFulFills().getOutputIndex().equals("0"));
+            assertTrue(input.getFulFills().getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+
+            Output output = transaction.getOutputs().get(0);
+            assertTrue(output.getAmount() != null);
+            assertTrue(output.getCondition().getUri() != null);
+            assertTrue(output.getCondition().getDetails().getPublicKey() != null);
+            assertTrue(output.getCondition().getDetails().getType() != null);
+            assertTrue(output.getPublicKeys() != null);
 
         } catch (Exception e) {
             e.printStackTrace();

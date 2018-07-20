@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class BigchainDbTransactionBuilder.
@@ -190,6 +192,16 @@ public class BigchainDbTransactionBuilder {
         private Class assetsDataClass = null;
 
         /**
+         * The inputs.
+         */
+        private List<Input> inputs = new ArrayList<>();
+
+        /**
+         * The outputs.
+         */
+        private List<Output> outputs = new ArrayList<>();
+
+        /**
          * The public key.
          */
         private EdDSAPublicKey publicKey;
@@ -226,7 +238,7 @@ public class BigchainDbTransactionBuilder {
                 details.setPublicKey(KeyPairUtils.encodePublicKeyInBase58(publicKey));
                 details.setType("ed25519-sha-256");
                 output.setCondition(new Condition(details, sha256Condition.getUri().toString()));
-                this.transaction.addOutput(output);
+                this.outputs.add(output);
             }
             return this;
         }
@@ -249,7 +261,7 @@ public class BigchainDbTransactionBuilder {
                 input.setFullFillment(fullfillment);
                 input.setFulFills(fullFill);
                 input.addOwner(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-                this.transaction.addInput(input);
+                this.inputs.add(input);
             }
             return this;
         }
@@ -293,26 +305,19 @@ public class BigchainDbTransactionBuilder {
         @Override
         public IBuild build(EdDSAPublicKey publicKey) {
             this.transaction = new Transaction();
-
             this.publicKey = publicKey;
-            Ed25519Sha256Condition sha256Condition = new Ed25519Sha256Condition(publicKey);
 
-            if (this.transaction.getOutputs().isEmpty()) {
-                Output output = new Output();
-                output.setAmount("1");
-                output.addPublicKey(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-                Details details = new Details();
-                details.setPublicKey(KeyPairUtils.encodePublicKeyInBase58(publicKey));
-                details.setType("ed25519-sha-256");
-                output.setCondition(new Condition(details, sha256Condition.getUri().toString()));
+            if (this.outputs.isEmpty()) {
+                this.addOutput("1");
+            }
+            for (Output output : this.outputs) {
                 this.transaction.addOutput(output);
             }
 
-            if (this.transaction.getInputs().isEmpty()) {
-                Input input = new Input();
-                input.setFullFillment(null);
-                input.setFulFills(null);
-                input.addOwner(KeyPairUtils.encodePublicKeyInBase58(publicKey));
+            if (this.inputs.isEmpty()) {
+                this.addInput(null, null);
+            }
+            for (Input input : this.inputs) {
                 this.transaction.addInput(input);
             }
 
