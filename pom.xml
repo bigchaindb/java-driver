@@ -64,9 +64,15 @@
 			<version>0.2.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.23.0</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -94,18 +100,17 @@
 			<scope>test</scope>
 		</dependency>
 		<!--
-		You must install java-crypto-conditions-2.0.0-SNAPSHOT.jar in your local Maven repository with the following
+		You must install cryptoconditions-0.0.1-SNAPSHOT.jar in your local Maven repository with the following
 		
-		mvn install:install-file -Dfile=<absolute_path_to_repo>\libs\java-crypto-conditions-2.0.0-SNAPSHOT.jar -DgroupId=org.interledger -DartifactId=java-crypto-conditions -Dversion=2.0.0-SNAPSHOT -Dpackaging=jar
+		mvn install:install-file -Dfile=<absolute_path_to_repo>\libs\cryptoconditions-0.0.1-SNAPSHOT.jar -DgroupId=com.bakaoh -DartifactId=cryptoconditions -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
 
 		On mac, from the main file path run the following:
-		mvn install:install-file -Dfile=libs\java-crypto-conditions-2.0.0-SNAPSHOT.jar -DgroupId=org.interledger -DartifactId=java-crypto-conditions -Dversion=2.0.0-SNAPSHOT -Dpackaging=jar
+		mvn install:install-file -Dfile=libs\cryptoconditions-0.0.1-SNAPSHOT.jar -DgroupId=com.bakaoh -DartifactId=cryptoconditions -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
 		-->
 		<dependency>
-			<groupId>org.interledger</groupId>
-			<artifactId>java-crypto-conditions</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
-			<!-- <systemPath>${project.basedir}/libs/java-crypto-conditions-2.0.0-SNAPSHOT.jar</systemPath> -->
+			<groupId>com.bakaoh</groupId>
+			<artifactId>cryptoconditions</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
@@ -116,6 +121,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.tyrus.bundles</groupId>

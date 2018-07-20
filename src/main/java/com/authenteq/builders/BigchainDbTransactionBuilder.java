@@ -8,15 +8,15 @@ import com.authenteq.model.*;
 import com.authenteq.util.DriverUtils;
 import com.authenteq.util.JsonUtils;
 import com.authenteq.util.KeyPairUtils;
+import com.bakaoh.cryptoconditions.types.Ed25519Sha256Condition;
+import com.bakaoh.cryptoconditions.types.Ed25519Sha256Fulfillment;
+import com.google.api.client.util.Base64;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
-import org.apache.commons.codec.binary.Base64;
-import org.interledger.cryptoconditions.types.Ed25519Sha256Condition;
-import org.interledger.cryptoconditions.types.Ed25519Sha256Fulfillment;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;

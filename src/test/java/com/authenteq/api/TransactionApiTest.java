@@ -8,12 +8,9 @@ import com.authenteq.json.strategy.TransactionDeserializer;
 import com.authenteq.json.strategy.TransactionsDeserializer;
 import com.authenteq.model.*;
 import com.authenteq.util.JsonUtils;
-import com.authenteq.util.KeyPairUtils;
-import com.authenteq.util.TypeAdapter;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import okhttp3.Response;
-import org.interledger.cryptoconditions.types.Ed25519Sha256Condition;
 import org.junit.Assert;
 import org.junit.Test;
 
