@@ -40,35 +40,42 @@ BigchainDbConfigBuilder
 	.addToken("app_key", "c929b708177dcc8b9d58180082029b8d").setup();
 ```
 
-## Example: Create a Transaction
+## Example: Prepare keys, assets and metadata
 ```java
 //    prepare your keys
 net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
 KeyPair keyPair = edDsaKpg.generateKeyPair();
 
-//    Set up your transaction
-Transaction transaction = BigchainDbTransactionBuilder.init()
-	.addAsset("firstname", "John")
-	.addAsset("lastname", "Smith")
-	.addMetaData("what", "My first BigchainDB transaction")
-	.addMetaData("this", "My 1st metadata BigchainDB transaction")
-	.operation(Operations.CREATE)
-	.buildOnly((EdDSAPublicKey) keyPair.getPublic(), (EdDSAPrivateKey) keyPair.getPrivate());
+//    New asset
+Map<String, String> assetData = new TreeMap<String, String>() {{
+    put("city", "Berlin, DE");
+    put("temperature", "22");
+    put("datetime", new Date().toString());
+}};
 
+//    New metadata
+MetaData metaData = new MetaData();
+metaData.setMetaData("what", "My first BigchainDB transaction");
+```
+
+## Example: Create a Transaction
+```java	
+//    Set up your transaction
+Transaction transaction = BigchainDbTransactionBuilder
+	.init()
+	.addAssets(assetData, TreeMap.class)
+	.addMetaData(metaData)
+	.operation(Operations.CREATE)
+	.buildOnly((EdDSAPublicKey) keyPair.getPublic());
 ```
 
 ## Example: Create and Sign Transaction
 ```java
-//    prepare your keys
-net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
-KeyPair keyPair = edDsaKpg.generateKeyPair();
-
 //    Set up your transaction
-Transaction transaction = BigchainDbTransactionBuilder.init()
-	.addAsset("firstname", "John")
-	.addAsset("lastname", "Smith")
-	.addMetaData("what", "My second BigchainDB transaction")
-	.addMetaData("this", "My 2nd metadata BigchainDB transaction")
+Transaction transaction = BigchainDbTransactionBuilder
+	.init()
+	.addAssets(assetData, TreeMap.class)
+	.addMetaData(metaData)
 	.operation(Operations.CREATE)
 	.buildAndSignOnly((EdDSAPublicKey) keyPair.getPublic(), (EdDSAPrivateKey) keyPair.getPrivate());
 
@@ -76,16 +83,12 @@ Transaction transaction = BigchainDbTransactionBuilder.init()
 
 ## Example: Create, Sign and Send a Transaction
 ```java
-//    prepare your keys
-net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
-KeyPair keyPair = edDsaKpg.generateKeyPair();
-
 //    Set up your transaction
-Transaction transaction = BigchainDbTransactionBuilder.init()
-	.addAsset("firstname", "John")
-	.addAsset("lastname", "Smith")
-	.addMetaData("what", "My third BigchainDB transaction")
-	.addMetaData("this", "My 3rd metadata BigchainDB transaction")
+Transaction transaction = BigchainDbTransactionBuilder
+	.init()
+	.addAssets(assetData, TreeMap.class)
+	.addMetaData(metaData)
+	.operation(Operations.CREATE)
 	.buildAndSign((EdDSAPublicKey) keyPair.getPublic(), (EdDSAPrivateKey) keyPair.getPrivate())
 	.sendTransaction();
 
@@ -107,7 +110,6 @@ BigchainDbConfigBuilder
 	.addToken("app_key", "c929b708177dcc8b9d58180082029b8d")
 	.webSocketMonitor(new MyCustomMonitor())
 	.setup();
-	
 ```
 
 <h2>Api Wrappers</h2>
@@ -151,6 +153,12 @@ Outputs getOutputs(String publicKey) throws IOException
 Outputs getSpentOutputs(String publicKey) throws IOException
 ```
 
+<h4>Get Unspent Outputs given a public key</h4>
+
+```java
+Outputs getUnspentOutputs(String publicKey) throws IOException
+```
+
 <h3>Assets</h3>
 
 <h4>Get Assets given search key</h4>
@@ -173,32 +181,32 @@ Assets getAssetsWithLimit(String searchKey, String limit) throws IOException
 Block getBlock(String blockId) throws IOException
 ```
 
-<h4>Get Blocks given transaction id and status</h4>
+<h4>Get Blocks given transaction id</h4>
 
 ```java
-List<String> getBlocks(String transactionId, String status) throws IOException
+List<String> getBlocksByTransactionId(String transactionId) throws IOException
 ```
 
-<h3>Votes</h3>
+<h3>MetaData</h3>
 
-<h4>Get Votes given a block id</h4>
+<h4>Get MetaData given search key</h4>
 
 ```java
-Votes getVotes(String blockId) throws IOException 
+MetaDatas getMetaData(String searchKey) throws IOException
 ```
 
-<h3>Statuses</h3>
-
-<h4>Get Transaction status</h4>
+<h4>Get MetaData given search key and limit</h4>
 
 ```java
-Status getTransactionStatus(String transactionId) throws IOException
+MetaDatas getMetaDataWithLimit(String searchKey, String limit) throws IOException
 ```
 
-<h4>Get Block status</h4>
+<h3>Validators</h3>
+
+<h4>Gets the the local validators set of a given node</h4>
 
 ```java
-Status getBlockStatus(String blockId) throws IOException
+Validators getValidators() throws IOException
 ```
 
 
