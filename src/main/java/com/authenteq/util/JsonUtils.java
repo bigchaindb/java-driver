@@ -17,7 +17,7 @@ public class JsonUtils {
     /**
      * The gson.
      */
-    private static String jsonDateFormat = "yyyy-MM-dd'T'HH:mm:ssX";  // Assumes Java 7 or higher
+    private static String jsonDateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 
     private static Map<String, TypeAdapter> typeAdaptersDeserialize = new ConcurrentHashMap<String, TypeAdapter>(16) {{
         put(Transaction.class.getCanonicalName(), new TypeAdapter(Transaction.class, new TransactionDeserializer()));
@@ -145,5 +145,9 @@ public class JsonUtils {
      */
     public static String toJson(Object src, ExclusionStrategy... exclusionStrategies) {
         return getGson(exclusionStrategies).toJson(src);
+    }
+
+    public static void setJsonDateFormat( final String dateFormat ) {
+        jsonDateFormat = dateFormat;
     }
 }

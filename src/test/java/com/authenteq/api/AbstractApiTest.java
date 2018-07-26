@@ -5,6 +5,7 @@ import com.authenteq.builders.BigchainDbConfigBuilder;
 import com.authenteq.model.Account;
 import com.authenteq.model.ApiEndpoints;
 import com.authenteq.model.BigChainDBGlobals;
+import com.authenteq.util.JsonUtils;
 import com.authenteq.ws.MessageHandler;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -138,6 +139,7 @@ public class AbstractApiTest extends AbstractTest {
                 .respond()
                 .withBody(V1_POST_TRANSACTION_JSON)
                 .withStatus(200);
+        JsonUtils.setJsonDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
         BigchainDbConfigBuilder
                 .baseUrl("http://localhost:" + port())
                 .addToken("app_id", "2bbaf3ff")
