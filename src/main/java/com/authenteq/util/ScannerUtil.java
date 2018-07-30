@@ -1,6 +1,6 @@
 package com.authenteq.util;
-import java.util.Scanner;
 
+import java.util.Scanner;
 
 
 /**
@@ -8,17 +8,12 @@ import java.util.Scanner;
  */
 public class ScannerUtil {
 
-	/**
-	 * exit when enter string "exit".
-	 */
-	public static void monitorExit() {
-		try (Scanner scanner = new Scanner(System.in)) {
-			while (true) {
-				String line = scanner.nextLine();
-				if ("exit".equals(line)) {
-					break;
-				}
-			}
-		}
-	}
+    /**
+     * exit when enter string "exit".
+     */
+    public static void monitorExit() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) if ("exit" .equals(scanner.nextLine())) break;
+        }
+    }
 }

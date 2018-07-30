@@ -18,18 +18,18 @@ public enum BigchainDbApi {
 	/** The assets. */
 	//	Core models
 	ASSETS("/assets"),
+
+	/** The metadata. */
+	METADATA("/metadata"),
 	
 	/** The outputs. */
 	OUTPUTS("/outputs"),
-	
-	/** The statuses. */
-	STATUSES("/statuses"),
-	
+
 	/** The blocks. */
 	BLOCKS("/blocks"),
 	
-	/** The votes. */
-	VOTES("/votes"),
+	/** The validators. */
+	VALIDATORS("/validators"),
 	
 	/** The transactions. */
 	TRANSACTIONS("/transactions");

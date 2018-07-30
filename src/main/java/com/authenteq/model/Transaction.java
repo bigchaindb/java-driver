@@ -110,15 +110,6 @@ public class Transaction implements Serializable {
 	}
 
 	/**
-	 * Sets the inputs.
-	 *
-	 * @param inputs the new inputs
-	 */
-	public void setInputs(List<Input> inputs) {
-		this.inputs = inputs;
-	}
-
-	/**
 	 * Gets the meta data.
 	 *
 	 * @return the meta data
@@ -162,15 +153,6 @@ public class Transaction implements Serializable {
 	 */
 	public List<Output> getOutputs() {
 		return outputs;
-	}
-
-	/**
-	 * Sets the outputs.
-	 *
-	 * @param outputs the new outputs
-	 */
-	public void setOutputs(List<Output> outputs) {
-		this.outputs = outputs;
 	}
 
 	/**

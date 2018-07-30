@@ -1,9 +1,5 @@
 package com.authenteq;
 
-import com.authenteq.api.StatusException;
-import com.authenteq.api.StatusesApi;
-import com.authenteq.model.Status;
-import com.authenteq.model.StatusCode;
 import com.authenteq.model.Transaction;
 
 import java.io.FileInputStream;
@@ -124,52 +120,6 @@ public abstract class AbstractTest
 	protected static String getEnv( final String envKey, final String otherwise )
 	{
 		return env.getOrDefault( envKey, otherwise );
-	}
-
-	/**
-	 *  poll for transaction status
-	 *
-	 * @param transaction transaction to check the status of
-	 * @return the status
-	 * @throws IOException network error
-	 */
-	protected Status getStatus( final Transaction transaction ) throws IOException, StatusException
-	{
-		return getStatus( transaction, getInt( "test.status.retries", 60 ) );
-	}
-
-	/**
-	 * Poll for transaction status
-	 *
-	 * @param transaction transaction to check the status of
-	 * @param attempts how many tries while waiting for validation
-	 * @return the status
-	 * @throws IOException network error
-	 */
-	protected Status getStatus( final Transaction transaction, final int attempts ) throws IOException, StatusException
-	{
-		return getStatus( transaction, attempts, StatusCode.VALID );
-	}
-
-	/**
-	 * Poll for transaction status
-	 *
-	 * @param transaction transaction to check the status of
-	 * @param attempts how many tries while waiting for validation
-	 * @return the status
-	 * @throws IOException network error
-	 */
-	protected Status getStatus( final Transaction transaction, final int attempts, final StatusCode expectedStatus ) throws IOException, StatusException
-	{
-		Status status = null;
-		for( int idx = 0; idx < attempts; idx++ ) {
-			status = StatusesApi.getTransactionStatus( transaction.getId() );
-			System.err.println( " status " + status );
-			if( status.getStatus().equals( expectedStatus ) )
-				return status;
-		}
-
-		throw new RuntimeException( "Could not get valid status, last status " + status + " after " + attempts + " attempts ");
 	}
 
 	/**

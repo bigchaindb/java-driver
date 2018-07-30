@@ -1,12 +1,12 @@
 package com.authenteq.util;
 
+import com.google.api.client.util.Base64;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
-import org.apache.commons.codec.binary.Base64;
 
 import java.security.KeyPair;
 import java.util.Arrays;

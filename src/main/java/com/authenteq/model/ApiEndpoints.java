@@ -14,14 +14,17 @@ public class ApiEndpoints {
 	/** The outputs. */
 	private String outputs;
 	
-	/** The statuses. */
-	private String statuses;
+	/** The validators. */
+	private String validators;
 	
 	/** The streams. */
 	private String streams;
 	
 	/** The transactions. */
 	private String transactions;
+
+	/** The metadata. */
+	private String metadata;
 	
 	/**
 	 * Gets the assets.
@@ -31,16 +34,7 @@ public class ApiEndpoints {
 	public String getAssets() {
 		return assets;
 	}
-	
-	/**
-	 * Sets the assets.
-	 *
-	 * @param assets the new assets
-	 */
-	public void setAssets(String assets) {
-		this.assets = assets;
-	}
-	
+
 	/**
 	 * Gets the docs.
 	 *
@@ -49,16 +43,7 @@ public class ApiEndpoints {
 	public String getDocs() {
 		return docs;
 	}
-	
-	/**
-	 * Sets the docs.
-	 *
-	 * @param docs the new docs
-	 */
-	public void setDocs(String docs) {
-		this.docs = docs;
-	}
-	
+
 	/**
 	 * Gets the outputs.
 	 *
@@ -67,34 +52,16 @@ public class ApiEndpoints {
 	public String getOutputs() {
 		return outputs;
 	}
-	
+
 	/**
-	 * Sets the outputs.
+	 * Gets the validators.
 	 *
-	 * @param outputs the new outputs
+	 * @return the validators
 	 */
-	public void setOutputs(String outputs) {
-		this.outputs = outputs;
+	public String getValidators() {
+		return validators;
 	}
-	
-	/**
-	 * Gets the statuses.
-	 *
-	 * @return the statuses
-	 */
-	public String getStatuses() {
-		return statuses;
-	}
-	
-	/**
-	 * Sets the statuses.
-	 *
-	 * @param statuses the new statuses
-	 */
-	public void setStatuses(String statuses) {
-		this.statuses = statuses;
-	}
-	
+
 	/**
 	 * Gets the streams.
 	 *
@@ -103,16 +70,7 @@ public class ApiEndpoints {
 	public String getStreams() {
 		return streams;
 	}
-	
-	/**
-	 * Sets the streams.
-	 *
-	 * @param streams the new streams
-	 */
-	public void setStreams(String streams) {
-		this.streams = streams;
-	}
-	
+
 	/**
 	 * Gets the transactions.
 	 *
@@ -121,15 +79,13 @@ public class ApiEndpoints {
 	public String getTransactions() {
 		return transactions;
 	}
-	
+
 	/**
-	 * Sets the transactions.
+	 * Gets the metadata.
 	 *
-	 * @param transactions the new transactions
+	 * @return the metadata
 	 */
-	public void setTransactions(String transactions) {
-		this.transactions = transactions;
+	public String getMetadata() {
+		return metadata;
 	}
-	
-	
 }

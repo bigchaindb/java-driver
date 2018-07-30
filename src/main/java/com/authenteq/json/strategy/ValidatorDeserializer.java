@@ -1,7 +1,7 @@
 package com.authenteq.json.strategy;
 
-import com.authenteq.model.Vote;
-import com.authenteq.model.Votes;
+import com.authenteq.model.Validator;
+import com.authenteq.model.Validators;
 import com.authenteq.util.JsonUtils;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -14,24 +14,24 @@ import java.util.Iterator;
 
 
 /**
- * The Class VoteDeserializer.
+ * The Class ValidatorDeserializer.
  */
-public class VoteDeserializer implements JsonDeserializer<Votes> {
+public class ValidatorDeserializer implements JsonDeserializer<Validators> {
 
 	/* (non-Javadoc)
 	 * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
 	 */
 	@Override
-	public Votes deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+	public Validators deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 		
-		Votes votes = new Votes();
+		Validators validators = new Validators();
 		Iterator<JsonElement> jsonIter = json.getAsJsonArray().iterator();
 		while(jsonIter.hasNext()) {
 			JsonElement jElement = jsonIter.next();
-			votes.addVote(JsonUtils.fromJson(jElement.getAsJsonObject().toString(), Vote.class));
+			validators.addValidator(JsonUtils.fromJson(jElement.getAsJsonObject().toString(), Validator.class));
 		}
-		return votes;
+		return validators;
 	}
 	
 }

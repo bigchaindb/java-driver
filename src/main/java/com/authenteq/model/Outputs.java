@@ -23,15 +23,6 @@ public class Outputs {
 	}
 
 	/**
-	 * Sets the output.
-	 *
-	 * @param output the new output
-	 */
-	public void setOutput(List<Output> output) {
-		this.output = output;
-	}
-	
-	/**
 	 * Adds the output.
 	 *
 	 * @param output the output

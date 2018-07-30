@@ -24,15 +24,6 @@ public class Transactions implements Serializable {
 	}
 
 	/**
-	 * Sets the transactions.
-	 *
-	 * @param transactions the new transactions
-	 */
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
-	}
-	
-	/**
 	 * Adds the transaction.
 	 *
 	 * @param transaction the transaction

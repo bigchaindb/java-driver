@@ -8,10 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.authenteq.builders.BigchainDbTransactionBuilder;
-import com.authenteq.json.strategy.AssetSerializer;
-import com.authenteq.model.Asset;
 import com.authenteq.model.Assets;
-import com.authenteq.model.StatusCode;
 import com.authenteq.model.Transaction;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
@@ -22,34 +19,58 @@ import static org.junit.Assert.assertEquals;
 /**
  * The Class AssetsApiTest.
  */
-public class AssetsApiTest extends AbstractApiTest
-{
-	/**
-	 * Test asset search.
-	 */
-	@Test
-	public void testAssetSearch()
-	{
-		String uuid = getUUID();
-		System.err.println( "AssetApiTest.testAssetSearch.uuid " + uuid );
-		try {
-			// create transaction with unique asset
-			net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
-			KeyPair alice = edDsaKpg.generateKeyPair();
-			TreeMap<String, String> assetData = new TreeMap<String, String>() {{ put( "uuid", uuid ); }};
+public class AssetsApiTest extends AbstractApiTest {
 
-			Transaction transaction = BigchainDbTransactionBuilder
-				                          .init()
-				                          .addAssets( assetData, Map.class )
-				                          .buildAndSign( (EdDSAPublicKey) alice.getPublic(), (EdDSAPrivateKey) alice.getPrivate() )
-				                          .sendTransaction();
-			assertEquals( StatusCode.VALID, getStatus( transaction ).getStatus() );    // wait for the transaction to be marked VALID
+    public static String V1_ASSET_JSON = "[\n" +
+            "    {\n" +
+            "        \"data\": {\"msg\": \"Hello BigchainDB 1!\"},\n" +
+            "        \"id\": \"51ce82a14ca274d43e4992bbce41f6fdeb755f846e48e710a3bbb3b0cf8e4204\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"data\": {\"msg\": \"Hello BigchainDB 2!\"},\n" +
+            "        \"id\": \"b4e9005fa494d20e503d916fa87b74fe61c079afccd6e084260674159795ee31\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"data\": {\"msg\": \"Hello BigchainDB 3!\"},\n" +
+            "        \"id\": \"fa6bcb6a8fdea3dc2a860fcdc0e0c63c9cf5b25da8b02a4db4fb6a2d36d27791\"\n" +
+            "    }\n" +
+            "]";
 
-			Assets assets = AssetsApi.getAssets( asQuoted( uuid ) );
-			assertTrue( assets.size() == 1 ); // there should be one and only one
-			assertTrue( assets.getAssets().get(0).getId() != null ); // asset ID should not be null
-		} catch (IOException | StatusException e) {
-			e.printStackTrace();
-		}
-	}
+    public static String V1_ASSET_LIMIT_JSON = "[\n" +
+            "    {\n" +
+            "        \"data\": {\"msg\": \"Hello BigchainDB 1!\"},\n" +
+            "        \"id\": \"51ce82a14ca274d43e4992bbce41f6fdeb755f846e48e710a3bbb3b0cf8e4204\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"data\": {\"msg\": \"Hello BigchainDB 2!\"},\n" +
+            "        \"id\": \"b4e9005fa494d20e503d916fa87b74fe61c079afccd6e084260674159795ee31\"\n" +
+            "    }\n" +
+            "]";
+
+    /**
+     * Test asset search.
+     */
+    @Test
+    public void testAssetSearch() {
+        try {
+            Assets assets = AssetsApi.getAssets("bigchaindb");
+            assertTrue(assets.size() == 3);
+            assertTrue(assets.getAssets().get(0).getId().equals("51ce82a14ca274d43e4992bbce41f6fdeb755f846e48e710a3bbb3b0cf8e4204"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test asset search with limit.
+     */
+    @Test
+    public void testAssetSearchWithLimit() {
+        try {
+            Assets assets = AssetsApi.getAssetsWithLimit("bigchaindb", "2");
+            assertTrue(assets.size() == 2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

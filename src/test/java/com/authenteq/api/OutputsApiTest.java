@@ -7,6 +7,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
 
 import com.authenteq.AbstractTest;
+import com.authenteq.model.Outputs;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -24,28 +25,75 @@ import net.i2p.crypto.eddsa.EdDSAPublicKey;
 /**
  * The Class OutputsApiTest.
  */
-public class OutputsApiTest extends AbstractApiTest
-{
+public class OutputsApiTest extends AbstractApiTest {
 
-	/**
-	 * Test.
-	 */
-	@Test
-	public void testOutput() throws InvalidKeySpecException {
-		try {
+    public static String PUBKEY = "1AAAbbb...ccc";
 
-			String pubKey = KeyPairUtils.encodePublicKeyInBase58((EdDSAPublicKey)Account.publicKeyFromHex("302a300506032b657003210033c43dc2180936a2a9138a05f06c892d2fb1cfda4562cbc35373bf13cd8ed373"));
-			Iterator<Output> outputIter = OutputsApi.getOutputs(pubKey).getOutput().iterator();
-			
-			while(outputIter.hasNext()) {
-				JsonUtils.toJson(TransactionsApi.getTransactionById(outputIter.next().getTransactionId()).getAsset().getData());
-			}
-			
-			assertTrue(OutputsApi.getOutputs(pubKey).getOutput().size() > 0);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public static String V1_OUTPUTS_JSON = "[\n" +
+            "  {\n" +
+            "    \"output_index\": 0,\n" +
+            "    \"transaction_id\": \"2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e\"\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"output_index\": 1,\n" +
+            "    \"transaction_id\": \"2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e\"\n" +
+            "  }\n" +
+            "]";
 
+    public static String V1_OUTPUTS_SPENT_JSON = "[\n" +
+            "  {\n" +
+            "    \"output_index\": 0,\n" +
+            "    \"transaction_id\": \"2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e\"\n" +
+            "  }\n" +
+            "]";
+
+    public static String V1_OUTPUTS_UNSPENT_JSON = "[\n" +
+            "  {\n" +
+            "    \"output_index\": 1,\n" +
+            "    \"transaction_id\": \"2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e\"\n" +
+            "  }\n" +
+            "]";
+
+    /**
+     * Test get outputs.
+     */
+    @Test
+    public void testGetOutputs() {
+        try {
+            Outputs outputs = OutputsApi.getOutputs(PUBKEY);
+            assertTrue(outputs.getOutput().size() == 2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get spent outputs.
+     */
+    @Test
+    public void testGetSpentOutputs() {
+        try {
+            Outputs outputs = OutputsApi.getSpentOutputs(PUBKEY);
+            assertTrue(outputs.getOutput().size() == 1);
+            assertTrue(outputs.getOutput().get(0).getOutputIndex().equals("0"));
+            assertTrue(outputs.getOutput().get(0).getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get unspent outputs.
+     */
+    @Test
+    public void testGetUnspentOutputs() {
+        try {
+            Outputs outputs = OutputsApi.getUnspentOutputs(PUBKEY);
+            assertTrue(outputs.getOutput().size() == 1);
+            assertTrue(outputs.getOutput().get(0).getOutputIndex().equals("1"));
+            assertTrue(outputs.getOutput().get(0).getTransactionId().equals("2d431073e1477f3073a4693ac7ff9be5634751de1b8abaa1f4e19548ef0b4b0e"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

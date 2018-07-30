@@ -34,16 +34,7 @@ public class ValidTransaction {
 	public String getTransactionId() {
 		return transactionId;
 	}
-	
-	/**
-	 * Sets the transaction id.
-	 *
-	 * @param transactionId the new transaction id
-	 */
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-	
+
 	/**
 	 * Gets the asset id.
 	 *
@@ -52,16 +43,7 @@ public class ValidTransaction {
 	public String getAssetId() {
 		return assetId;
 	}
-	
-	/**
-	 * Sets the asset id.
-	 *
-	 * @param assetId the new asset id
-	 */
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
-	}
-	
+
 	/**
 	 * Gets the block id.
 	 *
@@ -70,15 +52,4 @@ public class ValidTransaction {
 	public String getBlockId() {
 		return blockId;
 	}
-	
-	/**
-	 * Sets the block id.
-	 *
-	 * @param blockId the new block id
-	 */
-	public void setBlockId(String blockId) {
-		this.blockId = blockId;
-	}
-	
-	
 }
