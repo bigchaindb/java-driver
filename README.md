@@ -4,7 +4,7 @@
 
 > Official Java driver for [BigchainDB](https://github.com/bigchaindb/bigchaindb) created by [Authenteq](https://authenteq.com).
 
-**Please note**: due to non-official org.json implementation the driver is not compatible with Android
+**Please note**: this repo is deprecated. Official repo is moved to [https://github.com/bigchaindb/java-bigchaindb-driver](https://github.com/bigchaindb/java-bigchaindb-driver)
 
 ## Compatibility
 
